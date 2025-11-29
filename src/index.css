@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@layer {
+    .input {
+        @apply p-4 outline-0 border-2 font-medium text-[#8897AD] border-[#D4D7E3] bg-[#F7FBFF] rounded-2xl;
+    }
+
+    .button {
+        @apply text-white bg-[#162D3A] p-4 w-full cursor-pointer text-[18px] rounded-2xl font-medium;
+    }
+}
