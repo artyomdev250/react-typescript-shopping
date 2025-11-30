@@ -31,7 +31,7 @@ function SignInForm() {
                 />
             </div>
 
-            <div className="flex flex-col gap-2 mb-12">
+            <div className="flex flex-col gap-2 mb-6">
                 <span className="font-medium">Password</span>
                 <input
                     type="password"
@@ -44,7 +44,7 @@ function SignInForm() {
             </div>
 
             {error && (
-                <p className="mb-4 text-red-500 text-sm max-w-[410px]">{error}</p>
+                <p className="mb-4 text-red-500 font-medium">{error}</p>
             )}
 
             <button className="button" type="submit" disabled={loading}>
