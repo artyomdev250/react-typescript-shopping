@@ -1,24 +1,13 @@
 import Navbar from "../components/layout/Navbar";
-import { useDashboardMessage } from "../hooks/auth/useMessage";
 
 function Home() {
-    const { message, loading, error } = useDashboardMessage();
-
-    let content: string;
-    if (loading) {
-        content = "Loading dashboard...";
-    } else if (error) {
-        content = error;
-    } else {
-        content = message ?? "";
-    }
-
     return (
-        <div>
-            <Navbar />
-            <div className="p-6">
-                <h1 className="text-2xl font-semibold mb-4">Home</h1>
-                <p>{content}</p>
+        <div className="px-5 pb-[50px] h-screen">
+            <div className="mb-4"> 
+                <Navbar />
+            </div>
+            <div className="max-w-[1120px] m-auto">
+                <h1 className="text-2xl font-semibold">Home</h1>
             </div>
         </div>
     );
