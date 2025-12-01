@@ -1,18 +1,6 @@
-import { type FormEvent, useState } from "react";
-import { useSignIn } from "../../hooks/auth/useSignIn";
-
 function SignInForm() {
-    const { signIn, loading, error } = useSignIn();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        await signIn(email, password);
-    };
-
     return (
-        <form className="w-fit" onSubmit={handleSubmit}>
+        <form className="w-fit">
             <p className="font-bold text-[30px]">Welcome Back 👋</p>
             <p className="mt-7 mb-12 text-[19px] max-w-[410px] text-[#313957]">
                 Today is a new day. It's your day. You shape it. Sign in to start
@@ -26,8 +14,6 @@ function SignInForm() {
                     className="input"
                     placeholder="Example@email.com"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
 
@@ -38,17 +24,11 @@ function SignInForm() {
                     className="input"
                     placeholder="At least 8 characters"
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                 />
             </div>
 
-            {error && (
-                <p className="mb-4 text-red-500 font-medium">{error}</p>
-            )}
-
-            <button className="button" type="submit" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
+            <button className="button" type="submit">
+                Sign in
             </button>
         </form>
     );
