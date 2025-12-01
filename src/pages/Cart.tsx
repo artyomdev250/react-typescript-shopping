@@ -1,6 +1,8 @@
 function Cart() {
     return (
-        <div>Cart</div>
+        <div className="p-4">
+            Cart
+        </div>
     )
 }
 
