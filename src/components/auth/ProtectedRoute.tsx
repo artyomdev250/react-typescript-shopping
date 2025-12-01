@@ -1,8 +1,9 @@
+import { type ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 type Props = {
-    children: JSX.Element;
+    children: ReactNode;
 };
 
 export function ProtectedRoute({ children }: Props) {
@@ -19,5 +20,5 @@ export function ProtectedRoute({ children }: Props) {
         );
     }
 
-    return children;
+    return <>{children}</>;
 }
