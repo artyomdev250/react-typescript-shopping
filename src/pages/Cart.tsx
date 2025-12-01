@@ -1,6 +1,6 @@
 function Cart() {
     return (
-        <div className="p-4">
+        <div className="w-[1120px] mx-auto">
             Cart
         </div>
     )
