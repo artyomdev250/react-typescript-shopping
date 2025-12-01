@@ -1,12 +1,8 @@
-import { type ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import Navbar from "../layout/Navbar";
 
-interface ProtectedRouteProps {
-    children: ReactNode;
-}
-
-function ProtectedRoute({ children }: ProtectedRouteProps) {
+function ProtectedRoute() {
     const { isAuthenticated, loading } = useAuth();
 
     if (loading) {
@@ -14,14 +10,19 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
             <div className="h-screen flex items-center justify-center">
                 Loading...
             </div>
-        )
+        );
     }
 
     if (!isAuthenticated) {
         return <Navigate to="/signin" replace />;
     }
 
-    return children;
+    return (
+        <>
+            <Navbar />
+            <Outlet />
+        </>
+    );
 }
 
 export default ProtectedRoute;

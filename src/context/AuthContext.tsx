@@ -3,6 +3,7 @@ import {
     useContext,
     useState,
     useEffect,
+    useRef,
     type ReactNode,
 } from "react";
 import api from "../api/axios";
@@ -19,10 +20,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [accessToken, setAccessToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
 
-    // Try to restore session on load via /api/auth/refresh
+    const [loading, setLoading] = useState(true);
+    const didInit = useRef(false);
+
     useEffect(() => {
+        if (didInit.current) return;
+        didInit.current = true;
+
         const initAuth = async () => {
             try {
                 const res = await api.post("/api/auth/refresh");
@@ -36,6 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         initAuth();
     }, []);
+
 
     // Attach token + refresh interceptor
     useEffect(() => {

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+    --color-bg-item: oklch(98.4% 0.003 247.858);
+}
+
 @layer {
     .input {
         @apply p-4 outline-0 border-2 font-medium text-[#8897AD] border-[#D4D7E3] bg-[#F7FBFF] rounded-2xl;

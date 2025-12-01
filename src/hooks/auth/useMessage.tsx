@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 
@@ -9,43 +9,28 @@ export function useDashboardMessage() {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    const didFetch = useRef(false);
+
     useEffect(() => {
         if (authLoading || !accessToken) return;
-
-        let cancelled = false;
+        if (didFetch.current) return;
+        didFetch.current = true;
 
         const fetchMessage = async () => {
             setLoading(true);
-            setError(null);
-
             try {
                 const res = await api.get("/api/user/dashboard", {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
+                    headers: { Authorization: `Bearer ${accessToken}` },
                 });
-
-                if (!cancelled) {
-                    setMessage(res.data.message);
-                }
-            } catch (err: any) {
-                if (!cancelled) {
-                    setError(
-                        err?.response?.data?.message || "Failed to load dashboard."
-                    );
-                }
+                setMessage(res.data.message);
+            } catch (err) {
+                setError("Failed to load dashboard.");
             } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
 
         fetchMessage();
-
-        return () => {
-            cancelled = true;
-        };
     }, [authLoading, accessToken]);
 
     const isLoading = authLoading || loading;
