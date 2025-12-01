@@ -5,6 +5,7 @@ import Cart from "./pages/Cart";
 import SignIn from "./pages/SignIn";
 
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import MainLayout from "./components/layout/MainLayout";
 
 function App() {
   return (
@@ -12,22 +13,15 @@ function App() {
       <Route path="/signin" element={<SignIn />} />
 
       <Route
-        path="/"
         element={
           <ProtectedRoute>
-            <Home />
+            <MainLayout />
           </ProtectedRoute>
         }
-      />
-
-      <Route
-        path="/cart"
-        element={
-          <ProtectedRoute>
-            <Cart />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route path="/" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
