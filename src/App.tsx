@@ -1,20 +1,36 @@
-import "./App.css";
-
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
-import SignIn from "./pages/SignIn";
 import Cart from "./pages/Cart";
+import SignIn from "./pages/SignIn";
+
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/cart" element={<Cart />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/signin" element={<SignIn />} />
+
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
