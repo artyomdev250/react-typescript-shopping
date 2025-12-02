@@ -6,9 +6,20 @@ type ItemProps = {
     stock: number;
     description: string;
     brand: string;
+    onAdd: () => void;
+    isLoading?: boolean; // NEW
 };
 
-function ItemCard({ _id, name, category, price, stock, brand }: ItemProps) {
+function ItemCard({
+    _id,
+    name,
+    category,
+    price,
+    stock,
+    brand,
+    onAdd,
+    isLoading = false,
+}: ItemProps) {
     return (
         <li
             key={_id}
@@ -20,8 +31,12 @@ function ItemCard({ _id, name, category, price, stock, brand }: ItemProps) {
                     {brand} • {category}
                 </p>
 
-                <button className="bg-[#162D3A] text-white text-[15px] cursor-pointer font-medium py-1.5 px-3 rounded-[7.5px] mt-3">
-                    Add to cart
+                <button
+                    className="bg-[#162D3A] text-white text-[15px] cursor-pointer font-medium py-1.5 px-3 rounded-[7.5px] mt-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                    onClick={onAdd}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Adding..." : "Add to cart"}
                 </button>
             </div>
 

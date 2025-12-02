@@ -1,12 +1,24 @@
+import { useState } from "react";
 import { useItems } from "../hooks/dashboard/useItems";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import ItemCard from "../components/layout/ItemCard";
+import { useCartStore } from "../store/useCartStore";
 
 function Home() {
     const { data, loading, error } = useItems();
     const items = data?.items ?? [];
+
+    const { increase: addToCart } = useCartStore();
+
+    const [addingId, setAddingId] = useState<string | null>(null);
+
+    const handleAdd = async (id: string) => {
+        setAddingId(id);
+        await addToCart(id);
+        setAddingId(null);
+    };
 
     return (
         <div className="max-w-[1120px] mx-auto">
@@ -49,6 +61,8 @@ function Home() {
                             <ItemCard
                                 key={item._id}
                                 {...item}
+                                onAdd={() => handleAdd(item._id)}
+                                isLoading={addingId === item._id}
                             />
                         ))}
                     </ul>

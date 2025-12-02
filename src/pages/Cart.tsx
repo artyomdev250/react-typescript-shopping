@@ -1,12 +1,64 @@
-import { useCart } from "../hooks/cart/useCart";
+import { useEffect, useState } from "react";
+import { useCartStore } from "../store/useCartStore";
 import ItemCart from "../components/layout/ItemCart";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function Cart() {
-    const { data, loading, error } = useCart();
-    const items = data?.cart?.items ?? [];
+    const {
+        items,
+        loading,
+        error,
+        fetchCart,
+        increase,
+        decrease,
+        remove,
+    } = useCartStore();
+
+    const [loadingState, setLoadingState] = useState<{
+        [id: string]: {
+            increase?: boolean;
+            decrease?: boolean;
+            remove?: boolean;
+        };
+    }>({});
+
+    const setItemLoading = (
+        id: string,
+        action: "increase" | "decrease" | "remove",
+        value: boolean
+    ) => {
+        setLoadingState((prev) => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [action]: value,
+            },
+        }));
+    };
+
+    useEffect(() => {
+        fetchCart();
+    }, [fetchCart]);
+
+    const handleIncrease = async (id: string) => {
+        setItemLoading(id, "increase", true);
+        await increase(id);
+        setItemLoading(id, "increase", false);
+    };
+
+    const handleDecrease = async (id: string) => {
+        setItemLoading(id, "decrease", true);
+        await decrease(id);
+        setItemLoading(id, "decrease", false);
+    };
+
+    const handleRemove = async (id: string) => {
+        setItemLoading(id, "remove", true);
+        await remove(id);
+        setItemLoading(id, "remove", false);
+    };
 
     return (
         <div className="max-w-[1120px] mx-auto">
@@ -35,9 +87,7 @@ function Cart() {
             )}
 
             {error && (
-                <p className="text-red-600 font-medium">
-                    {error}
-                </p>
+                <p className="text-red-600 font-medium mb-3">{error}</p>
             )}
 
             {!loading && !error && items.length === 0 && (
@@ -45,22 +95,33 @@ function Cart() {
             )}
 
             {!loading && !error && items.length > 0 && (
-                <div>
+                <>
                     <b className="text-[24px] block mb-4">Cart</b>
 
                     <ul className="mt-4 flex flex-col gap-3">
-                        {items.map((item) => (
-                            <ItemCart
-                                key={item._id}
-                                name={item.itemId.name}
-                                brand={item.itemId.brand}
-                                category={item.itemId.category}
-                                price={item.itemId.price}
-                                quantity={item.quantity}
-                            />
-                        ))}
+                        {items.map((cartItem) => {
+                            const itemId = cartItem.itemId._id;
+                            const itemLoad = loadingState[itemId] || {};
+
+                            return (
+                                <ItemCart
+                                    key={cartItem._id}
+                                    name={cartItem.itemId.name}
+                                    brand={cartItem.itemId.brand}
+                                    category={cartItem.itemId.category}
+                                    price={cartItem.itemId.price}
+                                    quantity={cartItem.quantity}
+                                    onIncrease={() => handleIncrease(itemId)}
+                                    onDecrease={() => handleDecrease(itemId)}
+                                    onRemove={() => handleRemove(itemId)}
+                                    loadingIncrease={itemLoad.increase}
+                                    loadingDecrease={itemLoad.decrease}
+                                    loadingRemove={itemLoad.remove}
+                                />
+                            );
+                        })}
                     </ul>
-                </div>
+                </>
             )}
         </div>
     );
